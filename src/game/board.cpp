@@ -648,12 +648,11 @@ void Board::make_move(const Move& move, bool in_search) {
         return;
     }
 
-    
     m_State.set_moved_piece(piece_start);
     m_State.set_moved_from(move.start_square());
     m_State.set_moved_to(move.target_square());
     m_State.set_move_flag(move.flag());
-    
+
     m_State.try_reset_halfmove_clock();
     m_StateHistory.push_back(m_State);
     m_WhiteToMove = !m_WhiteToMove;
@@ -664,6 +663,7 @@ void Board::make_move(const Move& move, bool in_search) {
 }
 
 void Board::unmake_move(const Move& move, bool in_search) {
+    // TODO: proper unmake move system does not work at all!
     if (!contains(m_AllMoves, move)) {
         return;
     }
@@ -671,6 +671,9 @@ void Board::unmake_move(const Move& move, bool in_search) {
     auto last_state = m_StateHistory.back();
 
     m_WhiteToMove = !m_WhiteToMove;
+    m_StateHistory.pop_back();
+    m_State = m_StateHistory.back();
+
     bool undoing_white = m_WhiteToMove;
 
     int moved_from = last_state.get_moved_from();
@@ -771,9 +774,6 @@ void Board::unmake_move(const Move& move, bool in_search) {
     if (!in_search) {
         m_AllMoves.pop_back();
     }
-
-    m_StateHistory.pop_back();
-    m_State = m_StateHistory.back();
 }
 
 Result<void, std::string> Board::load_from_fen(const std::string& fen) {

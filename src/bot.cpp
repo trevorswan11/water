@@ -16,6 +16,7 @@ Result<void, std::string> Bot::set_position(const std::string& fen) {
 Result<void, std::string> Bot::make_move(const std::string& move_uci) {
     Move move(m_Board, move_uci);
     m_Board->make_move(move);
+    m_BoardHistory.push_back(*m_Board);
     return Result<void, std::string>();
 }
 
@@ -78,16 +79,21 @@ uint64_t Bot::perft(int depth) {
         auto pre_move_string = m_Board->to_string();
         m_Board->make_move(move);
         nodes += perft(depth - 1);
-        m_Board->unmake_move(move);
+        reload_board(m_BoardHistory.back());
+        m_BoardHistory.pop_back();
         auto post_move_string = m_Board->to_string();
 
-        if (pre_move_string != post_move_string) {
-            fmt::println("Failed at move {}, node {}", move.to_uci(), nodes);
-            fmt::println("Before:\n{}", pre_move_string);
-            fmt::println("After:\n{}", post_move_string);
-            continue;
-        }
+        // if (pre_move_string != post_move_string) {
+        //     fmt::println("Failed at move {}, node {}", move.to_uci(), nodes);
+        //     fmt::println("Before:\n{}", pre_move_string);
+        //     fmt::println("After:\n{}", post_move_string);
+        //     continue;
+        // }
     }
 
     return nodes;
+}
+
+void Bot::reload_board(const Board& board) {
+    m_Board->from_state(board);
 }

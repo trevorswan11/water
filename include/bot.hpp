@@ -10,8 +10,11 @@ class Bot {
     Ref<Board> m_Board;
     bool m_Thinking;
 
+    // TEMPORARY, RAM GOBLIN
+    std::vector<Board> m_BoardHistory;
+
   public:
-    Bot() : m_Board(CreateRef<Board>()), m_Thinking(false) { m_Board->load_startpos(); }
+    Bot() : m_Board(CreateRef<Board>()), m_Thinking(false), m_BoardHistory(200) { m_Board->load_startpos(); m_BoardHistory.push_back(*m_Board); }
 
     void new_game();
     void stop_thinking() { m_Thinking = false; };
@@ -26,4 +29,6 @@ class Bot {
     uint64_t perft(int depth);
 
     std::string board_str() { return m_Board->to_string(); }
+
+    void reload_board(const Board& board);
 };

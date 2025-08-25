@@ -39,7 +39,17 @@ class PositionInfo {
 
   public:
     PositionInfo() = default;
+    PositionInfo(const PositionInfo& other)
+        : m_Fen(other.m_Fen), m_Squares(other.m_Squares), m_WhiteToMove(other.m_WhiteToMove),
+          m_WhiteCastleKingside(other.m_WhiteCastleKingside),
+          m_WhiteCastleQueenside(other.m_WhiteCastleQueenside),
+          m_BlackCastleKingside(other.m_BlackCastleKingside),
+          m_BlackCastleQueenside(other.m_BlackCastleQueenside), m_EpSquare(other.m_EpSquare),
+          m_HalfmoveClock(other.m_HalfmoveClock), m_MoveClock(other.m_MoveClock) {}
+
     static Result<PositionInfo, std::string> from_fen(const std::string& fen);
+
+    PositionInfo& operator=(const PositionInfo& other) = default;
 
     friend class Board;
 };
@@ -148,6 +158,13 @@ class Board {
 
   public:
     Board() {};
+    Board(const Board& other)
+        : m_StartPos(other.m_StartPos), m_StoredPieces(other.m_StoredPieces),
+          m_WhiteBB(other.m_WhiteBB), m_BlackBB(other.m_BlackBB), m_PawnBB(other.m_PawnBB),
+          m_KnightBB(other.m_KnightBB), m_BishopBB(other.m_BishopBB), m_RookBB(other.m_RookBB),
+          m_QueenBB(other.m_QueenBB), m_KingBB(other.m_KingBB), m_AllPieceBB(other.m_AllPieceBB),
+          m_State(other.m_State), m_WhiteToMove(other.m_WhiteToMove),
+          m_StateHistory(other.m_StateHistory), m_AllMoves(other.m_AllMoves) {}
 
     bool is_white_to_move() const { return m_WhiteToMove; }
     PieceColor friendly_color() const {
@@ -184,6 +201,8 @@ class Board {
         }
     }
 
+    inline void from_state(const Board& other) { *this = other; }
+
     Piece piece_at(int square_idx) const;
     void add_piece(Piece piece, int square_idx);
     void make_move(const Move& move, bool in_search = false);
@@ -197,6 +216,8 @@ class Board {
         os << board.to_string();
         return os;
     }
+
+    Board& operator=(const Board& other) = default;
 
     friend class Generator;
 };

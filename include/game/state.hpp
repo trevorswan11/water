@@ -32,6 +32,7 @@ class GameState {
   public:
     GameState();
     GameState(bool wck, bool wcq, bool bck, bool bcq, int ep_square, int hmc);
+    GameState(const GameState& other);
 
     inline bool can_white_kingside() const { return m_WhiteCastleKingside; }
     inline bool can_black_kingside() const { return m_BlackCastleKingside; }
@@ -105,6 +106,8 @@ class GameState {
 
     inline void set_rook_to(int rook_to_idx) { m_RookTo = rook_to_idx; }
     inline int get_rook_to() const { return m_RookTo; }
+
+    GameState& operator=(const GameState& other) = default;
 
     friend class Board;
 };

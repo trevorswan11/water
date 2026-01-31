@@ -19,3 +19,5 @@
 - Fixed issue where perft divide would not flush the buffer at depth 1
 
 # 1.0.3
+- Switch to smp_allocator to enhance multithreaded heap allocation performance
+- 

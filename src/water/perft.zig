@@ -151,7 +151,10 @@ fn dispatch(allocator: std.mem.Allocator, case_filename: []const u8, frc: bool, 
 }
 
 pub fn main() !void {
-    const allocator = std.heap.page_allocator;
+    var gpa: std.heap.DebugAllocator(.{}) = .init;
+    defer _ = gpa.deinit();
+
+    const allocator = gpa.allocator();
     var output_file = try std.fs.cwd().createFile(result_filename, .{});
     defer output_file.close();
 

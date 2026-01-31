@@ -77,7 +77,9 @@ fn benchmark(board: *water.Board, test_cases: []const TestCase, writer: *std.Io.
 }
 
 pub fn main() !void {
-    const allocator = std.heap.page_allocator;
+    var gpa: std.heap.DebugAllocator(.{}) = .init;
+    defer _ = gpa.deinit();
+    const allocator = gpa.allocator();
 
     searcher_.reloadQLMR();
     tt.global_tt = try .init(allocator, null);

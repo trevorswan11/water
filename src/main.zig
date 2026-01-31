@@ -7,7 +7,7 @@ const search = @import("engine/search/searcher.zig");
 const commands = @import("engine/commands.zig");
 
 pub fn main() !void {
-    const allocator = std.heap.page_allocator;
+    const allocator = std.heap.smp_allocator;
 
     search.reloadQLMR();
     tt.global_tt = try tt.TranspositionTable.init(allocator, null);

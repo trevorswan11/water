@@ -1,5 +1,5 @@
-import tarfile
 import sys
+import tarfile
 from pathlib import Path
 
 
@@ -14,7 +14,7 @@ def compress_directories(base_dir: str, version: str):
         if item.is_dir():
             if item.name == "bin":
                 continue
-            archive_name = f"Water-{version}-{item.name}.tar.gz"
+            archive_name = f"water-{version}-{item.name}.tar.gz"
             archive_path = base_path / archive_name
 
             print(f"Compressing {item.name} -> {archive_name}")
@@ -27,7 +27,6 @@ def compress_directories(base_dir: str, version: str):
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("Usage: python compress_dirs.py <base_directory> <version>")
         sys.exit(1)
 
     base_directory = sys.argv[1]

@@ -50,8 +50,7 @@
                 zls
                 git
                 python3
-              ]
-              ++ lib.optionals stdenv.isLinux [ kcov ];
+              ];
           };
         }
       );
